@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sunk Cost Fallacy Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef2f7;
+    --sheet: #ffffff;
+    --ink: #14213d;
+    --ink-soft: #4a5775;
+    --line: #cfd8e6;
+    --accent: #1e3a8a;
+    --accent-ink: #ffffff;
+    --stamp: #b4161b;
+    --good: #0b6b4f;
+    --good-bg: #e3f4ec;
+    --mid: #8a5a00;
+    --mid-bg: #fbf0d6;
+    --bad: #b4161b;
+    --bad-bg: #fbe4e4;
+    --focus: #1d4ed8;
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1424;
+      --sheet: #16203a;
+      --ink: #e8edf8;
+      --ink-soft: #a5b1cc;
+      --line: #2c3a5c;
+      --accent: #8fb0ff;
+      --accent-ink: #0d1424;
+      --stamp: #ff6b6f;
+      --good: #6fdcb2;
+      --good-bg: #123a30;
+      --mid: #f3c566;
+      --mid-bg: #3a2f12;
+      --bad: #ff8a8d;
+      --bad-bg: #411a1d;
+      --focus: #9db9ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1424;
+    --sheet: #16203a;
+    --ink: #e8edf8;
+    --ink-soft: #a5b1cc;
+    --line: #2c3a5c;
+    --accent: #8fb0ff;
+    --accent-ink: #0d1424;
+    --stamp: #ff6b6f;
+    --good: #6fdcb2;
+    --good-bg: #123a30;
+    --mid: #f3c566;
+    --mid-bg: #3a2f12;
+    --bad: #ff8a8d;
+    --bad-bg: #411a1d;
+    --focus: #9db9ff;
+  }
+
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.12; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2.2rem, 7vw, 3.1rem); font-weight: 800; }
+  h2 { font-size: clamp(1.45rem, 4.6vw, 1.85rem); font-weight: 700; }
+  h3 { font-size: 1.05rem; font-weight: 700; }
+  p { margin: 0 0 1em; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+  [tabindex="-1"]:focus { outline: none; }
+
+  .sheet {
+    background: var(--sheet);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px 24px;
+  }
+  .lede { color: var(--ink-soft); font-size: 1.1rem; max-width: 34em; }
+
+  .btn {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 22px;
+    cursor: pointer;
+    min-height: 48px;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost { background: transparent; color: var(--accent); }
+
+  /* start */
+  .start h1 { margin-bottom: 14px; }
+  .receipt {
+    margin: 26px 0 28px;
+    border-top: 2px dashed var(--line);
+    border-bottom: 2px dashed var(--line);
+    padding: 14px 0;
+    font-size: 1rem;
+  }
+  .receipt .row { display: flex; justify-content: space-between; gap: 16px; padding: 3px 0; }
+  .receipt .row span:last-child { font-family: var(--display); font-weight: 700; }
+  .receipt .row.strike span:last-child { text-decoration: line-through; color: var(--ink-soft); }
+  .best { margin: 18px 0 0; color: var(--ink-soft); font-size: 0.98rem; }
+
+  /* quiz */
+  .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; font-family: var(--display); font-size: 0.95rem; color: var(--ink-soft); }
+  .ticks { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-bottom: 22px; }
+  .tick { height: 8px; border-radius: 3px; background: var(--line); }
+  .tick.done { background: var(--accent); }
+  .tick.now { background: transparent; box-shadow: inset 0 0 0 2px var(--accent); }
+  .qtitle { font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--ink-soft); margin: 0 0 6px; }
+  .scenario { font-size: 1.2rem; margin: 0 0 22px; }
+  .opts { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .opt {
+    width: 100%;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 10px;
+    align-items: start;
+    font: inherit;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: var(--ink);
+    background: var(--sheet);
+    border: 2px solid var(--line);
+    border-radius: 9px;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:disabled { cursor: default; }
+  .opt .letter { font-family: var(--display); font-weight: 800; color: var(--accent); }
+  .opt .tag { display: block; margin-top: 6px; font-family: var(--display); font-weight: 700; font-size: 0.9rem; }
+  .opt.chosen { border-width: 3px; padding: 13px 15px; }
+  .opt.chosen.s2 { border-color: var(--good); background: var(--good-bg); }
+  .opt.chosen.s1 { border-color: var(--mid); background: var(--mid-bg); }
+  .opt.chosen.s0 { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.s2 .tag { color: var(--good); }
+  .opt.s1 .tag { color: var(--mid); }
+  .opt.s0 .tag { color: var(--bad); }
+  .opt.best-hint { border-style: dashed; border-color: var(--good); }
+  .opt.faded { opacity: 0.62; }
+
+  .feedback { margin-top: 22px; border-left: 4px solid var(--accent); padding: 4px 0 4px 16px; }
+  .feedback p { margin-bottom: 0.9em; }
+  .feedback .btn { margin-top: 4px; }
+
+  /* result */
+  .result-top { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .stamp {
+    flex: none;
+    width: 150px; height: 150px;
+    display: grid; place-items: center;
+    border: 5px solid var(--stamp);
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 3px var(--sheet), inset 0 0 0 5px var(--stamp);
+    color: var(--stamp);
+    transform: rotate(-7deg);
+    text-align: center;
+    animation: stampdown 520ms cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  .stamp .grade { font-family: var(--display); font-weight: 800; font-size: 5.6rem; line-height: 0.9; }
+  .stamp .pct { font-family: var(--display); font-weight: 700; font-size: 1rem; margin-top: -14px; }
+  @keyframes stampdown {
+    from { transform: rotate(-14deg) scale(1.7); opacity: 0; }
+    to   { transform: rotate(-7deg) scale(1); opacity: 1; }
+  }
+  .result-copy { flex: 1 1 260px; }
+  .result-copy .score { font-family: var(--display); font-weight: 700; color: var(--ink-soft); margin: 0 0 4px; }
+  .result-copy h2 { margin-bottom: 8px; }
+  .verdict { margin: 22px 0 0; }
+  .review { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 14px; }
+  .review li { border-top: 1px solid var(--line); padding-top: 14px; }
+  .review .head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .review .pill { flex: none; font-family: var(--display); font-weight: 700; font-size: 0.85rem; padding: 2px 10px; border-radius: 999px; }
+  .pill.s2 { color: var(--good); background: var(--good-bg); }
+  .pill.s1 { color: var(--mid); background: var(--mid-bg); }
+  .pill.s0 { color: var(--bad); background: var(--bad-bg); }
+  .review .yours { font-size: 0.98rem; color: var(--ink-soft); margin: 4px 0 4px; }
+  .review .why { font-size: 1rem; margin: 0; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .rules { margin: 28px 0 0; padding: 18px 20px; background: var(--bg); border-radius: 9px; }
+  .rules h3 { margin-bottom: 6px; }
+  .rules p { margin: 0; font-size: 1rem; }
+
+  .credit {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    display: flex;
+    justify-content: center;
+  }
+  .credit .mark {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--stamp);
+    border: 2px solid var(--stamp);
+    border-radius: 6px;
+    padding: 4px 12px;
+    transform: rotate(-2deg);
+    letter-spacing: 0.01em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stamp { animation: none; }
+  }
+  @media (max-width: 480px) {
+    body { font-size: 18px; }
+    .sheet { padding: 22px 16px; }
+    .stamp { width: 124px; height: 124px; }
+    .stamp .grade { font-size: 4.6rem; }
+  }
+</style>
+</head>
+<body>
+<main id="app" aria-live="off"></main>
+<footer class="credit"><span class="mark">Made by 3azome</span></footer>
+
+<script>
+(function () {
+  var QUESTIONS = [
+    {
+      title: "The movie ticket",
+      scenario: "You paid $20 for a movie ticket. Twenty minutes in, it's clearly terrible and you'd rather be doing almost anything else. What do you do?",
+      options: [
+        { text: "Leave and spend the evening on something I'd enjoy.", pts: 2 },
+        { text: "Give it until the halfway point, then decide.", pts: 1 },
+        { text: "Stay to the end. I paid for it, so I should get my money's worth.", pts: 0 }
+      ],
+      lesson: "The $20 is gone whether you stay or leave. The only thing still in play is how you spend the next two hours."
+    },
+    {
+      title: "The buffet",
+      scenario: "You paid $40 for an all-you-can-eat buffet. You're already full and a little uncomfortable, and there's a table of food you haven't touched. What do you do?",
+      options: [
+        { text: "Stop eating. I'm full, and the $40 is already spent.", pts: 2 },
+        { text: "Eat a bit more so the $40 feels less wasted, but stop before it hurts.", pts: 1 },
+        { text: "Keep going until I've gotten my $40 worth.", pts: 0 }
+      ],
+      lesson: "You paid when you walked in. Eating past full adds discomfort and gets none of the money back."
+    },
+    {
+      title: "The software project",
+      scenario: "Your team has spent $2M on a software project. An honest estimate says finishing takes another $1M, and the finished product would be worth about $600K to the company. Leadership asks what you recommend.",
+      options: [
+        { text: "Stop the project and redirect the budget.", pts: 2 },
+        { text: "Fund one more quarter, then reassess against a clear goal.", pts: 1 },
+        { text: "Finish it. We've spent too much to walk away now.", pts: 0 }
+      ],
+      lesson: "Compare the $1M still to spend with the $600K it would return. The $2M already spent is the same under every option."
+    },
+    {
+      title: "The stock that fell",
+      scenario: "A stock you bought has dropped 40%. You no longer believe in the company, but you could keep holding it. What's your reasoning?",
+      options: [
+        { text: "If I wouldn't buy it today at this price, I should sell and put the money somewhere better.", pts: 2 },
+        { text: "Sell half now and keep half in case it recovers.", pts: 1 },
+        { text: "Hold until it gets back to what I paid. I won't sell at a loss.", pts: 0 }
+      ],
+      lesson: "The market doesn't know what you paid. The useful question is whether this is the best place for that money from here on."
+    },
+    {
+      title: "The degree",
+      scenario: "You're two years into a degree and you've realized you dislike the field and the career it leads to. Two years remain. What do you do?",
+      options: [
+        { text: "Compare the next two years with other paths from today, even if that means switching.", pts: 2 },
+        { text: "Finish the degree, but start exploring other options on the side.", pts: 1 },
+        { text: "Finish it. Switching would make the first two years pointless.", pts: 0 }
+      ],
+      lesson: "Those two years taught you what you do and don't want. What counts now is where the next two years lead."
+    },
+    {
+      title: "The old car",
+      scenario: "You spent $1,200 fixing your old car last month. Now it needs an $1,800 repair, after which it would be worth about $1,500 and likely keep breaking down. A reliable used car costs $3,500.",
+      options: [
+        { text: "Compare repairing and replacing from today, ignoring the $1,200 already spent.", pts: 2 },
+        { text: "Get a second opinion on the repair, but lean toward fixing it since I've put so much in.", pts: 1 },
+        { text: "Do the repair. I've put too much into this car to give up on it now.", pts: 0 }
+      ],
+      lesson: "The earlier $1,200 doesn't change which option is cheaper and more reliable from here."
+    },
+    {
+      title: "The gym membership",
+      scenario: "You prepaid $480 for a year at a gym. Three months in you dread going, and you've found a free running group you actually enjoy.",
+      options: [
+        { text: "Switch to running and stop forcing the gym.", pts: 2 },
+        { text: "Go to the gym twice a week alongside running so the membership gets used.", pts: 1 },
+        { text: "Keep going every week. I'm not letting $480 go to waste.", pts: 0 }
+      ],
+      lesson: "The fee is spent either way. Put your time into the activity you'll actually keep doing."
+    },
+    {
+      title: "The novel",
+      scenario: "You're 150 pages into a 400-page novel that isn't holding your attention. You keep telling yourself it will get better.",
+      options: [
+        { text: "Put it down and pick something I'm excited about.", pts: 2 },
+        { text: "Skim a few later chapters, then decide.", pts: 1 },
+        { text: "Finish it. I've already read a third of it.", pts: 0 }
+      ],
+      lesson: "Pages already read don't become more valuable if you read more bad ones. Reading time is limited, so spend it on books you want."
+    },
+    {
+      title: "Spotting the bias",
+      scenario: "Which question best tests whether sunk costs are steering your decision?",
+      options: [
+        { text: "Would I start this today if I had invested nothing so far?", pts: 2 },
+        { text: "What would a friend with no stake in this tell me?", pts: 1 },
+        { text: "How can I make sure what I've already put in isn't wasted?", pts: 0 }
+      ],
+      lesson: "The start-fresh question strips away the history and leaves only future costs and rewards. A neutral friend helps too, but the start-fresh question tests the bias directly."
+    },
+    {
+      title: "Planning ahead",
+      scenario: "You're about to start a big project. Which plan best protects you from sunk-cost thinking later?",
+      options: [
+        { text: "Set a budget and a deadline up front, and agree to re-evaluate or stop when either is reached.", pts: 2 },
+        { text: "Check in with myself now and then, and quit if it starts to feel wrong.", pts: 1 },
+        { text: "Commit fully and promise myself I'll never look back.", pts: 0 }
+      ],
+      lesson: "Decide your limits while you're still clear-headed. After you've invested, it gets much harder to walk away."
+    }
+  ];
+
+  var LABELS = { 2: "Best choice", 1: "Halfway there", 0: "Sunk cost trap" };
+  var GRADES = [
+    { min: 90, g: "A", title: "Clear-eyed", text: "You judge decisions by what's still ahead, not by what's behind you. Keep using the start-fresh question when the stakes are high." },
+    { min: 80, g: "B", title: "Mostly forward-looking", text: "You usually weigh the future first, with a few moments where past investment still tugs at you. Setting exit points early would close that gap." },
+    { min: 70, g: "C", title: "Pulled by the past", text: "You often notice the trap, but the urge not to waste what you've spent still wins some of the time. Try asking what you'd do if you were starting fresh today." },
+    { min: 60, g: "D", title: "Stuck in the sunk", text: "Past investment is shaping a lot of your choices. That's very common, and the habits below are an easy way to start changing it." },
+    { min: 0,  g: "F", title: "Anchored to the past", text: "Most of your answers were driven by what you've already spent. Almost everyone does this, and it's a skill you can build with a few simple habits." }
+  ];
+  var KEY = "sunk-quiz-best";
+
+  var app = document.getElementById("app");
+  var state = { i: 0, order: [], answers: [] };
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var n = a.length - 1; n > 0; n--) {
+      var k = Math.floor(Math.random() * (n + 1));
+      var t = a[n]; a[n] = a[k]; a[k] = t;
+    }
+    return a;
+  }
+  function gradeFor(pct) {
+    for (var n = 0; n < GRADES.length; n++) if (pct >= GRADES[n].min) return GRADES[n];
+    return GRADES[GRADES.length - 1];
+  }
+  function readBest() {
+    try {
+      var v = localStorage.getItem(KEY);
+      return v === null ? null : parseInt(v, 10);
+    } catch (e) { return null; }
+  }
+  function saveBest(pct) {
+    try {
+      var cur = readBest();
+      if (cur === null || isNaN(cur) || pct > cur) localStorage.setItem(KEY, String(pct));
+    } catch (e) {}
+  }
+  function focusHeading() {
+    var h = app.querySelector("[data-focus]");
+    if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: false }); }
+  }
+
+  function renderStart() {
+    var best = readBest();
+    var bestHtml = "";
+    if (best !== null && !isNaN(best)) {
+      bestHtml = '<p class="best">Your best so far: grade ' + gradeFor(best).g + " (" + best + "%).</p>";
+    }
+    app.innerHTML =
+      '<section class="sheet start">' +
+        '<h1 data-focus>Sunk cost fallacy quiz</h1>' +
+        '<p class="lede">Ten everyday decisions. Pick what you would really do, and you\'ll get a grade at the end.</p>' +
+        '<div class="receipt" aria-hidden="true">' +
+          '<div class="row strike"><span>Already spent</span><span>$20.00</span></div>' +
+          '<div class="row"><span>Still ahead</span><span>Your evening</span></div>' +
+        '</div>' +
+        '<button class="btn" id="start">Start the quiz</button>' +
+        bestHtml +
+      '</section>';
+    document.getElementById("start").addEventListener("click", startQuiz);
+  }
+
+  function startQuiz() {
+    state.i = 0;
+    state.answers = [];
+    state.order = QUESTIONS.map(function (q) {
+      return shuffle(q.options.map(function (_, idx) { return idx; }));
+    });
+    renderQuestion();
+    window.scrollTo(0, 0);
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[state.i];
+    var order = state.order[state.i];
+    var ticks = "";
+    for (var n = 0; n < QUESTIONS.length; n++) {
+      ticks += '<span class="tick' + (n < state.i ? " done" : n === state.i ? " now" : "") + '"></span>';
+    }
+    var letters = ["A", "B", "C"];
+    var opts = order.map(function (optIdx, pos) {
+      return '<li><button class="opt" data-opt="' + optIdx + '">' +
+        '<span class="letter" aria-hidden="true">' + letters[pos] + '</span>' +
+        '<span class="body"><span class="txt">' + q.options[optIdx].text + '</span></span>' +
+      '</button></li>';
+    }).join("");
+
+    app.innerHTML =
+      '<section class="sheet">' +
+        '<div class="meta"><span>Question ' + (state.i + 1) + ' of ' + QUESTIONS.length + '</span></div>' +
+        '<div class="ticks" aria-hidden="true">' + ticks + '</div>' +
+        '<p class="qtitle">' + q.title + '</p>' +
+        '<h2 class="scenario" data-focus style="font-family: var(--serif); font-weight:500; font-size:1.25rem; line-height:1.5; letter-spacing:0;">' + q.scenario + '</h2>' +
+        '<ul class="opts">' + opts + '</ul>' +
+        '<div id="fb" aria-live="polite"></div>' +
+      '</section>';
+
+    var buttons = app.querySelectorAll(".opt");
+    Array.prototype.forEach.call(buttons, function (b) {
+      b.addEventListener("click", function () { choose(parseInt(b.getAttribute("data-opt"), 10)); });
+    });
+    focusHeading();
+  }
+
+  function choose(optIdx) {
+    var q = QUESTIONS[state.i];
+    state.answers[state.i] = optIdx;
+    var pts = q.options[optIdx].pts;
+
+    var buttons = app.querySelectorAll(".opt");
+    Array.prototype.forEach.call(buttons, function (b) {
+      var idx = parseInt(b.getAttribute("data-opt"), 10);
+      var p = q.options[idx].pts;
+      b.disabled = true;
+      b.classList.add("s" + p);
+      var body = b.querySelector(".body");
+      if (idx === optIdx) {
+        b.classList.add("chosen");
+        body.insertAdjacentHTML("beforeend", '<span class="tag">Your pick: ' + LABELS[p] + '</span>');
+      } else if (p === 2) {
+        b.classList.add("best-hint");
+        body.insertAdjacentHTML("beforeend", '<span class="tag">Best choice</span>');
+      } else {
+        b.classList.add("faded");
+      }
+    });
+
+    var last = state.i === QUESTIONS.length - 1;
+    document.getElementById("fb").innerHTML =
+      '<div class="feedback">' +
+        '<p><strong>' + LABELS[pts] + '.</strong> ' + q.lesson + '</p>' +
+        '<button class="btn" id="next">' + (last ? "See my grade" : "Next question") + '</button>' +
+      '</div>';
+    var next = document.getElementById("next");
+    next.addEventListener("click", function () {
+      if (last) renderResult(); else { state.i++; renderQuestion(); window.scrollTo(0, 0); }
+    });
+    next.focus();
+  }
+
+  function renderResult() {
+    var total = 0;
+    state.answers.forEach(function (a, n) { total += QUESTIONS[n].options[a].pts; });
+    var max = QUESTIONS.length * 2;
+    var pct = Math.round((total / max) * 100);
+    var gr = gradeFor(pct);
+    saveBest(pct);
+
+    var review = QUESTIONS.map(function (q, n) {
+      var o = q.options[state.answers[n]];
+      return '<li>' +
+        '<div class="head"><h3>' + q.title + '</h3><span class="pill s' + o.pts + '">' + LABELS[o.pts] + '</span></div>' +
+        '<p class="yours">You chose: ' + o.text + '</p>' +
+        '<p class="why">' + q.lesson + '</p>' +
+      '</li>';
+    }).join("");
+
+    app.innerHTML =
+      '<section class="sheet">' +
+        '<div class="result-top">' +
+          '<div class="stamp" role="img" aria-label="Grade ' + gr.g + ', ' + pct + ' percent">' +
+            '<div><div class="grade">' + gr.g + '</div><div class="pct">' + pct + '%</div></div>' +
+          '</div>' +
+          '<div class="result-copy">' +
+            '<p class="score">' + total + ' of ' + max + ' points</p>' +
+            '<h2 data-focus>' + gr.title + '</h2>' +
+            '<p>' + gr.text + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="rules">' +
+          '<h3>Habits that help</h3>' +
+          '<p>Ask whether you\'d start this today with nothing invested. Set a budget or deadline before you begin. Get the view of someone with no stake. Treat past losses as tuition for a lesson.</p>' +
+        '</div>' +
+        '<ul class="review">' + review + '</ul>' +
+        '<div class="actions">' +
+          '<button class="btn" id="again">Try again</button>' +
+        '</div>' +
+      '</section>';
+    document.getElementById("again").addEventListener("click", startQuiz);
+    focusHeading();
+    window.scrollTo(0, 0);
+  }
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
